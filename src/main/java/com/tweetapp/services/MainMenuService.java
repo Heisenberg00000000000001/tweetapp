@@ -20,6 +20,7 @@ public class MainMenuService {
 				System.out.println("9. Logout");
 				System.out.println("Select your choice from above or Press any other key to close the TweetApp.");
 			}
+			System.out.println("working");
 			// Scanner scanner = new Scanner(System.in);
 			// System.out.println("Enter username");
 			//
