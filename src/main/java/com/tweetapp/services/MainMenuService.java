@@ -50,19 +50,21 @@ public class MainMenuService {
 					switch (option) {
 					case "1": {
 						boolean isEmailValid = false;
-						System.out.println("\n\n\n\nSign Up \n-------");
-						System.out.print("Enter firstname : ");
+						System.out.println("\n\nSign Up \n-------");
+						System.out.println("Mandatory fields are marked as '*'");
+						System.out.print("Enter firstname* : ");
 						String fname = reader.readLine().trim();
 						System.out.print("Enter lastname  : ");
 						String lname = reader.readLine().trim();
-						System.out.print("Enter gender    : ");
+						System.out.print("Enter gender*    : ");
 						String gender = reader.readLine().trim();
 						System.out.print("Enter DateOfBirth (" + Constants.DOB_FORMAT + " ) ");
 						String dob = reader.readLine().trim();
-						System.out.print("Enter email : ");
+						System.out.print("Enter email* : ");
 						email = reader.readLine().trim();
-						System.out.print("Enter password : ");
+						System.out.print("Enter password* : ");
 						String pwd = reader.readLine();
+
 						try {
 							userService.saveUser(fname, lname, gender, dob, email, pwd, true);
 							System.out.println("\nUser details Saved Successfully");
@@ -189,17 +191,24 @@ public class MainMenuService {
 					}
 
 					case "5": {
-						System.out.print("\nEnter the password : ");
-						String password = reader.readLine();
+						System.out.print("\nEnter the old password : ");
+						String oldPassword = reader.readLine();
 						try {
-							if (!userService.validateUser(username, password)) {
-								userService.resetPassword(username, password);
-								System.out.println("\nPassword Updated. please login to continue");
-								isLoggedIn = false;
-								user = null;
-								userService.setStatus(isLoggedIn, username);
+
+							if (userService.validateUser(username, oldPassword)) {
+								System.out.print("\nEnter the new password : ");
+								String newPassword = reader.readLine();
+								if (!userService.validateUser(username, newPassword)) {
+									userService.resetPassword(username, newPassword);
+									System.out.println("\nPassword Updated. please login to continue");
+									isLoggedIn = false;
+									user = null;
+									userService.setStatus(isLoggedIn, username);
+								} else {
+									System.out.println("\nNew password cannot be same as old password");
+								}
 							} else {
-								System.out.println("\nNew Password cannot be same as old  password");
+								System.out.println("\nPlease enter the correct current password");
 							}
 						} catch (Exception e) {
 							System.out.println("Exception!");

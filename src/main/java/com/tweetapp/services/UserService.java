@@ -57,6 +57,18 @@ public class UserService {
 			Boolean isActive) throws Exception {
 		User newUser = new User(firstName, lastName, gender, DateUtil.convertToDate(dob), email,
 				PasswordConfig.encode(pwd), isActive);
+		if (firstName.isEmpty()) {
+			throw new Exception("First Name cannot be null");
+		}
+		if (gender.isEmpty()) {
+			throw new Exception("Gender cannot be null");
+		}
+		if (email.isEmpty()) {
+			throw new Exception("Email cannot be null");
+		}
+		if (pwd.isEmpty()) {
+			throw new Exception("Password cannot be null");
+		}
 		if (!EmailValidationUtil.isValid(email)) {
 			throw new Exception("Email is invalid. please use proper email address");
 		}
