@@ -17,7 +17,7 @@ public class TweetApplication {
 			MainMenuService mainMenuService = new MainMenuService();
 			mainMenuService.menu();
 		} catch (Exception e) {
-			LOGGER.info("Application Terminated. please Restart");
+			LOGGER.debug(e.getMessage());
 		}
 	}
 }

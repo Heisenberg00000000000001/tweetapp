@@ -1,233 +1,232 @@
 package com.tweetapp.services;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.List;
+
+import com.tweetapp.model.Post;
+import com.tweetapp.model.User;
+import com.tweetapp.util.Constants;
+import com.tweetapp.util.EmailValidationUtil;
+
 public class MainMenuService {
+	int count = 1;
+
+	public int getcount() {
+		return count++;
+	}
+
 	public void menu() throws Exception {
-		boolean appRunning = true;
+		UserService userService = new UserService();
+		TweetService tweetService = new TweetService();
 		boolean isLoggedIn = false;
-		while (appRunning) {
-			System.out.println("\nMENU \n---- ");
+		boolean isActive = true;
+		String username = null;
+		String email = null;
+		User user = new User();
+		while (isActive) {
 			if (!isLoggedIn) {
+				System.out.println("\nMENU \n----");
 				System.out.println("1. Register");
 				System.out.println("2. Login");
 				System.out.println("3. Forgot Password");
-				System.out.println("\nSelect your choice : ");
+				System.out.print("\nSelect your option : ");
 			} else {
-				System.out.println("4. Post a tweet");
-				System.out.println("5. View My Tweets");
-				System.out.println("6. View All Tweets");
-				System.out.println("7. View All Users");
-				System.out.println("8. Reset Password");
-				System.out.println("9. Logout");
-				System.out.println("Select your choice from above or Press any other key to close the TweetApp.");
+				System.out.println("\nMENU \n----");
+				System.out.println("1. Post a tweet");
+				System.out.println("2. View My Tweets");
+				System.out.println("3. View All Tweets");
+				System.out.println("4. View All Users");
+				System.out.println("5. Reset Password");
+				System.out.println("6. Logout");
+				System.out.print("\nSelect your option :  ");
 			}
-			System.out.println("working");
-			// Scanner scanner = new Scanner(System.in);
-			// System.out.println("Enter username");
-			//
-			// String userName = myObj.nextLine(); //
-			//
-			// }
-			// UserService userService = new UserService();
-			// TweetService tweetService = new TweetService();
-			//
-			// String username = null;
-			// String email = null;
-			//
-			// while (isexit) {
-			// System.out.println("\nMENU \n---- ");
-			// if (!islogin) {
-			// System.out.println("1. Login");
-			// System.out.println("2. Register");
-			// System.out.println("3. Forgot Password");
-			// } else {
-			// System.out.println("4. Post a tweet");
-			// System.out.println("5. View My Tweets");
-			// System.out.println("6. View All Tweets");
-			// System.out.println("7. View All Users");
-			// System.out.println("8. Reset Password");
-			// System.out.println("9. Logout");
-			// System.out.println("Press any other key to close the TweetApp.");
-			// }
-			// BufferedReader sc = new BufferedReader(new
-			// InputStreamReader(System.in));
-			// String choice;
-			// try {
-			// choice = sc.readLine().trim();
-			// switch (choice) {
-			// case "1": {
-			// if (islogin) {
-			// System.err.println("User already Logged in...");
-			// } else if (!islogin) {
-			// System.out.println("Enter email");
-			// email = sc.readLine().trim();
-			// if (EmailUtil.emailValidate(email)) {
-			//
-			// System.out.println("Enter password");
-			// String password = sc.readLine();
-			//
-			// try {
-			// if (userService.validateUser(email, password)) {
-			// username = email;
-			// islogin = true;
-			// userService.setStatus(islogin, email);
-			// System.out.println("login successfull");
-			// } else {
-			// System.err.println("incorrect credentials");
-			// }
-			// } catch (Exception e) {
-			// System.err.println("User not found ! Kindly Register before
-			// login");
-			// }
-			// } else {
-			// System.err.println("Incorrect Email Format");
-			// }
-			// }
-			//
-			// break;
-			// }
-			//
-			// case "2": {
-			// if (!islogin) {
-			// System.out.println("New User Registration form...");
-			// System.out.println("Enter firstname");
-			// String fname = sc.readLine().trim();
-			// System.out.println("Enter lastname");
-			// String lname = sc.readLine().trim();
-			// System.out.println("Enter gender (Male/Female)");
-			// String gender = sc.readLine().trim();
-			// System.out.println("Enter DateOfBirth " +
-			// BatchConstants.DOB_FORMAT);
-			// String dob = sc.readLine().trim();
-			// System.out.println("Enter email");
-			// email = sc.readLine().trim();
-			// System.out.println("Enter password");
-			// String pwd = sc.readLine();
-			// try {
-			// userService.saveUser(fname, lname, gender, dob, email, pwd,
-			// false);
-			// System.out.println("User details Saved Successfully");
-			// } catch (Exception e) {
-			// System.err.println("email already exists.. select choice for
-			// login");
-			// }
-			// } else if (islogin) {
-			// System.err.println("user already logged in...");
-			// }
-			// break;
-			// }
-			//
-			// case "3": {
-			// if (!islogin) {
-			// System.out.println("Enter email to change the password");
-			// email = sc.readLine().trim();
-			// try {
-			// if (userService.validateEmail(email)) {
-			// System.out.println("Email is validated");
-			// System.out.println("Enter password");
-			// String password = sc.readLine();
-			// userService.resetPassword(email, password);
-			// System.out.println("Password Updated");
-			// }
-			// } catch (Exception e) {
-			// System.err.println("Enter a valid email");
-			// }
-			// } else if (islogin) {
-			// System.err.println("Logout to change password");
-			// }
-			// break;
-			// }
-			// case "4": {
-			// if (!islogin) {
-			// System.err.println("Please login first to post a tweet");
-			// } else if (islogin) {
-			// System.out.println("Enter tweet message...!");
-			// try {
-			// String tweetMessage = sc.readLine().trim();
-			// tweetService.saveTweet(tweetMessage, username);
-			// System.out.println("Message saved successfully.....!");
-			// } catch (Exception e) {
-			// e.printStackTrace();
-			// }
-			// }
-			// break;
-			// }
-			//
-			// case "5": {
-			// if (!islogin) {
-			// System.err.println("Please login first to get your Tweets");
-			// } else if (islogin) {
-			// try {
-			// List<Post> userTweets = tweetService.getUsertweets(username);
-			// System.out.println("Your tweets are : ");
-			// userTweets.forEach(tweet -> {
-			// System.out.println(tweet.getTweet());
-			// });
-			// } catch (Exception e) {
-			// System.err.println("No tweets found under " + username +
-			// "....!");
-			// }
-			// }
-			// break;
-			// }
-			//
-			// case "6": {
-			// List<Post> userTweets = tweetService.getAlltweets();
-			// System.out.println(" Tweets : ");
-			// userTweets.forEach(tweet -> {
-			// System.out.println(tweet.getTweet());
-			// });
-			// break;
-			// }
-			//
-			// case "7": {
-			// System.out.println("Users List: ");
-			// List<String> userList = userService.getAllUsers();
-			// userList.forEach(name -> {
-			// System.out.println(name);
-			// });
-			// break;
-			// }
-			//
-			// case "8": {
-			// System.out.println("Enter the password");
-			// String password = sc.readLine();
-			// try {
-			// if (!userService.validateUser(username, password)) {
-			// userService.resetPassword(username, password);
-			// System.out.println("Password Updated");
-			// } else {
-			// System.err.println("New Password cannot be same as old
-			// password");
-			// }
-			// } catch (Exception e) {
-			// System.err.println("Exception!");
-			// }
-			//
-			// break;
-			// }
-			//
-			// case "9": {
-			// if (!islogin) {
-			// System.err.println("Please login first...");
-			// } else if (islogin) {
-			// username = email;
-			// islogin = false;
-			// userService.setStatus(islogin, username);
-			// System.out.println("Logged out successfully");
-			// }
-			// break;
-			// }
-			//
-			// default: {
-			// isexit = false;
-			// sc.close();
-			// break;
-			// }
-			// }
-			// } catch (IOException e1) {
-			// e1.printStackTrace();
-			// }
-			// }
+			try {
+
+				BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+				String option = reader.readLine().trim();
+				if (!isLoggedIn) {
+					switch (option) {
+					case "1": {
+						boolean isEmailValid = false;
+						System.out.println("\n\n\n\nSign Up \n-------");
+						System.out.print("Enter firstname : ");
+						String fname = reader.readLine().trim();
+						System.out.print("Enter lastname  : ");
+						String lname = reader.readLine().trim();
+						System.out.print("Enter gender    : ");
+						String gender = reader.readLine().trim();
+						System.out.print("Enter DateOfBirth (" + Constants.DOB_FORMAT + " ) ");
+						String dob = reader.readLine().trim();
+						System.out.print("Enter email : ");
+						email = reader.readLine().trim();
+						System.out.print("Enter password : ");
+						String pwd = reader.readLine();
+						try {
+							userService.saveUser(fname, lname, gender, dob, email, pwd, true);
+							System.out.println("\nUser details Saved Successfully");
+						} catch (Exception e) {
+							if (e.getMessage().contains("Duplicate entry")) {
+								System.out.println("\nEmail already taken. please use another email");
+							} else {
+								System.out.println("\n" + e.getMessage());
+							}
+						}
+						break;
+					}
+
+					case "2": {
+						System.out.print("\n\nEnter email : ");
+						email = reader.readLine().trim();
+						if (EmailValidationUtil.isValid(email)) {
+							System.out.print("Enter password : ");
+							String password = reader.readLine();
+							try {
+								if (userService.validateUser(email, password)) {
+									username = email;
+									isLoggedIn = true;
+									userService.setStatus(isLoggedIn, email);
+									System.out.println("\nLogin Successfull");
+									user = userService.getUserDetails(email);
+
+								} else {
+									System.out.println(
+											"\nIncorrect Cretentials. please verify username, password and try again");
+								}
+							} catch (Exception e) {
+								System.out.println("User not found ! Kindly Register before login");
+							}
+						} else {
+							System.out.println("\nIncorrect Email Format. Check email and please try again");
+						}
+
+						break;
+					}
+
+					case "3": {
+						System.out.print("\nEnter email to change the password : ");
+						email = reader.readLine().trim();
+						if (EmailValidationUtil.isValid(email)) {
+							try {
+								if (userService.validateEmail(email)) {
+									System.out.print("Enter Date of Birth " + Constants.DOB_FORMAT + " : ");
+									String dob = reader.readLine().trim();
+									if (userService.validateUserWithDob(email, dob)) {
+										System.out.print("Enter password : ");
+										String password = reader.readLine();
+										userService.resetPassword(email, password);
+										System.out.println("\nPassword Updated");
+									} else {
+										System.out.println("\nIncorrect Date of Birth");
+									}
+
+								}
+							} catch (Exception e) {
+								System.out.println("\n" + e.getMessage());
+							}
+						} else {
+							System.out.println("\nIncorrect Email Format. Check email and please try again");
+						}
+
+						break;
+					}
+
+					default: {
+						System.out.println("\nInvalid Option. Please select form the following");
+						break;
+					}
+					}
+				} else {
+					switch (option) {
+					case "1": {
+						System.out.print("\nEnter your tweet : ");
+						try {
+							String tweetMessage = reader.readLine().trim();
+							tweetService.saveTweet(tweetMessage, username, user.getFirstName());
+							System.out.println("\nTweet posted successfully");
+						} catch (Exception e) {
+							System.out.println(e.getMessage());
+
+						}
+						break;
+					}
+
+					case "2": {
+						try {
+							List<Post> userTweets = tweetService.getUsertweets(username);
+							System.out.println("\nYour tweets\n-----------\n");
+							userTweets.forEach(tweet -> {
+								System.out.println(
+										tweet.getFirstName() + "[" + tweet.getTimestamp() + "]\t: " + tweet.getTweet());
+							});
+						} catch (Exception e) {
+							System.out.println("No tweets found under " + username + "....!");
+						}
+
+						break;
+					}
+
+					case "3": {
+						List<Post> userTweets = tweetService.getAlltweets();
+						System.out.println("\nAll Tweets\n----------\n");
+						userTweets.forEach(tweet -> {
+							System.out.println(
+									tweet.getFirstName() + "[" + tweet.getTimestamp() + "]\t: " + tweet.getTweet());
+						});
+						break;
+					}
+
+					case "4": {
+						System.out.println("\nList of Users\n-------------\n");
+
+						List<String> userList = userService.getAllUsers();
+						userList.forEach(name -> {
+							System.out.println(getcount() + ". " + name);
+						});
+						count = 1;
+						break;
+					}
+
+					case "5": {
+						System.out.print("\nEnter the password : ");
+						String password = reader.readLine();
+						try {
+							if (!userService.validateUser(username, password)) {
+								userService.resetPassword(username, password);
+								System.out.println("\nPassword Updated. please login to continue");
+								isLoggedIn = false;
+								user = null;
+								userService.setStatus(isLoggedIn, username);
+							} else {
+								System.out.println("\nNew Password cannot be same as old  password");
+							}
+						} catch (Exception e) {
+							System.out.println("Exception!");
+						}
+
+						break;
+					}
+
+					case "6": {
+						username = email;
+						isLoggedIn = false;
+						user = null;
+						userService.setStatus(isLoggedIn, username);
+						System.out.println("\nLogged out successfully");
+
+						break;
+					}
+
+					default: {
+						System.out.println("\nPlease select a valid option from below");
+						break;
+					}
+					}
+				}
+			} catch (IOException e1) {
+				System.out.println(e1.getMessage());
+			}
 		}
 	}
 }
